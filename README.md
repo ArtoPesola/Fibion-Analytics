@@ -1,14 +1,14 @@
-# FibionFlow
-Fibion Flow is an R markdown code to process data collected from the Fibion Research device. It includes a validated algorithm to detect sleep and non-wear periods and to analyse sitting and physical activity durations, accumulation patterns and energy expenditures from the valid waking hours. Additional properties include visual representation of the algorithm performance, and data segmentation based on custom timestamps, e.g. for analysing sitting and physical activity metrics for working and non-working hours. 
+# Fibion Analytics
+Fibion Analytics is an R markdown code to process data collected from the Fibion device. It includes a validated algorithm to detect sleep and non-wear periods and to analyse sitting and physical activity durations, accumulation patterns and energy expenditures from the valid waking hours. Additional properties include visual representation of the algorithm performance, and data segmentation based on custom timestamps, e.g. for analysing sitting and physical activity metrics for working and non-working hours. 
 
-## Features of FibionFlow
+## Features of Fibion Analytics
 - Automated valid waking wear isolation from time in bed and prolonged non-wear
 - Adaptable parameters to customize algorithm thresholds
 - Adaptable wear time criteria
 - Visualisation of valid waking wear vs. sleep and non-wear with activiyt intensity and off periods (can be exported as pdf files)
 - Data segmentation by customized timestamps (can be imported as Microsoft Excel files)
 
-## Outputs of FibionFlow
+## Outputs of Fibion Analytics
 
 ### Sitting and activity duration and energy expenditure:
  - Waking wear time
@@ -43,11 +43,10 @@ Fibion Flow is an R markdown code to process data collected from the Fibion Rese
  - Activity bout mean duration
  - Duration at <10 min, 10-30 min and >30 min sitting bouts
  - Duration at <10 min, 10-30 min and >30 min activity bouts
- - Usual sitting bout duration
- - Usual activity bout duration
  - Active sitting (>1.5 METs) duration
  - Active sitting (>1.5 METs) proportion of total sitting
  - Usual sitting bout duration (weighted median of sitting bout lengths)
+ - Usual activity bout duration (weighted median of activity bout lengths)
 
 The variables are calculated as daily means, as well as non-weighted and weighted (weekdays 5/7, weekend days 2/7) overall means. 
 
@@ -57,4 +56,4 @@ The variables are calculated as daily means, as well as non-weighted and weighte
 ### Example of custom events visualisation
 ![FibionFlow custom events output figure](https://github.com/ArtoPesola/FibionFlow/assets/51989005/df851d9f-4f85-49f9-af0f-1ed34a081720)
 
-FibionFlow has been developed by Arto Pesola (director of Active Life Lab, South-Eastern Finland University of Applied Sciences and co-founder of Fibion Inc). More information and resources can be found at www.fibion.com.
+Fibion Analytics has been developed by Arto Pesola (director of Active Life Lab, South-Eastern Finland University of Applied Sciences and co-founder of Fibion Inc). More information and resources can be found at www.fibion.com.

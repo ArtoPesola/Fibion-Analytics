@@ -1,0 +1,120 @@
+---
+title: "Fibion Analytics Algorithm"
+output: html_notebook
+  toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook including validated FibionFlow algorithms. 
+
+When you execute code within the notebook, the results appear beneath the code. 
+
+##Download the libraries to use
+
+```{r}
+
+# Define a vector of package names
+packages <- c("zoo", "plyr", "tidyverse", "readxl", "writexl", "data.table")
+
+# Function to install and load packages
+install_and_load <- function(packages) {
+  for (pkg in packages) {
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+      install.packages(pkg)
+    }
+    library(pkg, character.only = TRUE)
+  }
+}
+
+# Call the function with the list of packages
+install_and_load(packages)
+
+
+
+```
+
+## Custom events-based analysis
+
+```{r}
+
+### Parameter configuration ###
+
+set_parameters <- function() {
+  list(
+    light_threshold = 3,
+    mpa_threshold_min = 3,
+    mpa_threshold_max = 6,
+    vpa_threshold = 6
+  )
+}
+
+### Load Scripts ###
+source("./R/data_preparation.R")
+source("./R/events_preparation.R")
+source("./R/met_calculation.R")
+source("./R/results_calculation_events.R")
+source("./R/data_visualisation_events.R")
+
+### Parameter Configuration ###
+parameters <- set_parameters()
+
+# Specify the path relative to the current working directory
+data_path <- file.path(getwd(), "Example data")
+
+# Get the list of CSV files
+file_list <- list.files(path = data_path, pattern = "\\.(CSV|csv)$", recursive = TRUE, full.names = TRUE)
+
+if (length(file_list) == 0) {
+  stop("No files found in the directory.")
+}
+
+### Main Loop ###
+process_files <- function(file_list, parameters) {
+  results_list <- list()
+  
+  for (currentfile in file_list) {
+    message("Processing file: ", currentfile)
+    
+    # Extract file information
+    file <- sub(".*data/", "", currentfile)
+    ID <- sub("\\.CSV$", "", file, ignore.case = TRUE)
+    
+    # Data Preparation
+    prepared_data <- prepare_data(currentfile)
+    
+    #Prepapre events
+    events <- prepare_events(currentfile)
+    
+    # MET Calculations
+    data_with_METs <- calculate_METs(prepared_data, parameters)
+    
+    # Calculate results
+    eventresultssummary <- calculate_events_results(data_with_METs, events)
+    
+    # Add filename and ID to the summary
+    eventresultssummary[, file := file]
+    eventresultssummary[, ID := ID]
+    
+    # Visualization (optional, comment out if not needed)
+    visualise_events_data(data_with_METs, events, ID)
+    
+    # Collect results
+    results_list[[file]] <- eventresultssummary
+  }
+  
+  combined_results <- do.call(rbind, results_list)
+  return(combined_results)
+}
+
+### Run the Main Process ###
+activity_results_events <- process_files(file_list, parameters)
+
+### Save Results ###
+write.table(activity_results_events, "./Results/fibion_daily_summaries_events.txt", sep = "\t", row.names = FALSE)
+write_xlsx(activity_results_events, "./Results/fibion_daily_summaries_events.xlsx")
+
+
+```
+
+
